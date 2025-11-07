@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
+import 'package:playly/helpers/confetti_effects.dart';
+import 'package:playly/helpers/sound_handles.dart';
 import 'package:playly/helpers/sound_image_levels.dart';
 import 'package:playly/home.dart';
 
@@ -14,25 +12,6 @@ class SoundImageGame extends StatefulWidget {
 
   @override
   State<SoundImageGame> createState() => _SoundImageGameState();
-}
-
-final player = AudioPlayer();
-
-Future<void> playCrossPlatformSound(String assetPath) async {
-  await player.stop();
-
-  if (Platform.isAndroid) {
-    // Android handles AssetSource directly
-    await player.play(AssetSource(assetPath.replaceFirst('assets/', '')));
-    return;
-  }
-
-  // For Windows, Linux, macOS → copy to temp then play
-  final byteData = await rootBundle.load(assetPath);
-  final tempDir = await getTemporaryDirectory();
-  final tempFile = File('${tempDir.path}/${assetPath.split('/').last}');
-  await tempFile.writeAsBytes(byteData.buffer.asUint8List());
-  await player.play(DeviceFileSource(tempFile.path));
 }
 
 class _SoundImageGameState extends State<SoundImageGame> {
@@ -163,17 +142,7 @@ class _SoundImageGameState extends State<SoundImageGame> {
           children: [
             Align(
               alignment: Alignment.bottomCenter,
-              child: ConfettiWidget(
-                confettiController: _confettiController,
-                blastDirection: -3.14 / 2,
-                emissionFrequency: 0.1,
-                numberOfParticles: 25,
-                gravity: 0.4,
-                blastDirectionality: BlastDirectionality.explosive,
-                maxBlastForce: 40,
-                minBlastForce: 20,
-                shouldLoop: false,
-              ),
+              child: CommonConfetti(controller: _confettiController),
             ),
             SingleChildScrollView(
               child: Column(

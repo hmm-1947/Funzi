@@ -1,10 +1,10 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:playly/helpers/picture_shadow_levels.dart';
+import 'package:playly/helpers/sound_handles.dart';
 import 'package:playly/home.dart';
-import 'package:playly/games/sound_image.dart';
+import 'package:playly/helpers/confetti_effects.dart';
 
 class PictureShadowGame extends StatefulWidget {
   const PictureShadowGame({super.key});
@@ -16,20 +16,19 @@ class PictureShadowGame extends StatefulWidget {
 class _PictureShadowGameState extends State<PictureShadowGame> {
   int currentLevel = 1;
   final Map<String, bool> _matched = {};
-  late ConfettiController _confettiController;
-  final AudioPlayer _player = AudioPlayer();
 
   final levels = pictureShadowLevels;
 
   bool levelCompleted = false;
   bool allcomplete = false;
+  late ConfettiController _confettiController;
 
   @override
   void initState() {
     super.initState();
-    _player.setVolume(1.0);
-    _player.setSource(AssetSource('soundeffects/pluck.mp3')); // preload
-    _player.setSource(AssetSource('soundeffects/correct.mp3')); // preload
+    player.setVolume(1.0);
+    player.setSource(AssetSource('soundeffects/pluck.mp3'));
+    player.setSource(AssetSource('soundeffects/correct.mp3'));
     _confettiController = ConfettiController(
       duration: const Duration(seconds: 2),
     );
@@ -38,7 +37,7 @@ class _PictureShadowGameState extends State<PictureShadowGame> {
   @override
   void dispose() {
     _confettiController.dispose();
-    _player.dispose();
+    player.dispose();
     super.dispose();
   }
 
@@ -228,17 +227,7 @@ class _PictureShadowGameState extends State<PictureShadowGame> {
               ),
             ),
 
-            ConfettiWidget(
-              confettiController: _confettiController,
-              blastDirection: pi / 2,
-              emissionFrequency: 0.05,
-              blastDirectionality: BlastDirectionality.explosive,
-
-              numberOfParticles: 50,
-              gravity: 0.3,
-              minBlastForce: 10,
-              maxBlastForce: 100,
-            ),
+            CommonConfetti(controller: _confettiController),
 
             const SizedBox(height: 40),
             if (levelCompleted)

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:playly/helpers/sketches_game_levels.dart';
 import 'package:playly/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,18 +15,7 @@ class _ColoringPageState extends State<ColoringPage>
     with WidgetsBindingObserver {
   String? selectedSketch;
 
-  final List<String> sketches = [
-    'assets/sketches/sketch_cat.png',
-    'assets/sketches/sketch_flower.png',
-    'assets/sketches/sketch_car.png',
-    'assets/sketches/sketch_house.png',
-    'assets/sketches/sketch_winnie.png',
-    'assets/sketches/sketch_shoe.png',
-    'assets/sketches/sketch_fish.png',
-    'assets/sketches/sketch_hen.png',
-    'assets/sketches/sketch_kettle.png',
-    'assets/sketches/sketch_ship.png',
-  ];
+  final sketches = sketchesGameLevels;
 
   final Map<String, List<DrawingStroke>> savedDrawings = {};
   List<Offset> currentEraserStroke = [];

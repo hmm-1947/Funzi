@@ -1,4 +1,3 @@
-
 ## Funzi
 
 Funzi is a fun and educational app made with Flutter.

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'package:playly/games/sound_image.dart';
-import 'dart:math';
+import 'package:playly/helpers/confetti_effects.dart';
+import 'package:playly/helpers/emotion_game_levels.dart';
+import 'package:playly/helpers/sound_handles.dart';
 import 'package:playly/home.dart';
 
 class EmotionGamePage extends StatefulWidget {
@@ -12,48 +13,7 @@ class EmotionGamePage extends StatefulWidget {
 }
 
 class _EmotionGamePageState extends State<EmotionGamePage> {
-  final List<EmotionLevel> levels = [
-    EmotionLevel(
-      imagePath: 'assets/emotions/happy_face.jpg',
-      correctEmotion: 'Happy',
-    ),
-    EmotionLevel(
-      imagePath: 'assets/emotions/surprised_face.jpg',
-      correctEmotion: 'Surprised',
-    ),
-    EmotionLevel(
-      imagePath: 'assets/emotions/sad_face.jpg',
-      correctEmotion: 'Sad',
-    ),
-    EmotionLevel(
-      imagePath: 'assets/emotions/angry_face.jpg',
-      correctEmotion: 'Angry',
-    ),
-    EmotionLevel(
-      imagePath: 'assets/emotions/tired_face.png',
-      correctEmotion: 'Tired',
-    ),
-    EmotionLevel(
-      imagePath: 'assets/emotions/scared_face.png',
-      correctEmotion: 'Scared',
-    ),
-    EmotionLevel(
-      imagePath: 'assets/emotions/disgusted_face.png',
-      correctEmotion: 'Disgusted',
-    ),
-    EmotionLevel(
-      imagePath: 'assets/emotions/confused_face.png',
-      correctEmotion: 'Confused',
-    ),
-    EmotionLevel(
-      imagePath: 'assets/emotions/shy_face.png',
-      correctEmotion: 'Shy',
-    ),
-    EmotionLevel(
-      imagePath: 'assets/emotions/proud_face.png',
-      correctEmotion: 'Proud',
-    ),
-  ];
+  final levels = emotionGameLevels;
 
   int currentLevel = 0;
   bool answeredCorrectly = false;
@@ -206,17 +166,7 @@ class _EmotionGamePageState extends State<EmotionGamePage> {
           children: [
             Align(
               alignment: Alignment.bottomCenter,
-              child: ConfettiWidget(
-                confettiController: _confettiController,
-                blastDirection: -pi / 2,
-                emissionFrequency: 0.08,
-                numberOfParticles: 25,
-                gravity: 0.4,
-                maxBlastForce: 40,
-                minBlastForce: 20,
-                blastDirectionality: BlastDirectionality.explosive,
-                shouldLoop: false,
-              ),
+              child: CommonConfetti(controller: _confettiController),
             ),
 
             // Main content
@@ -323,11 +273,4 @@ class _EmotionGamePageState extends State<EmotionGamePage> {
       ),
     );
   }
-}
-
-class EmotionLevel {
-  final String imagePath;
-  final String correctEmotion;
-
-  EmotionLevel({required this.imagePath, required this.correctEmotion});
 }
