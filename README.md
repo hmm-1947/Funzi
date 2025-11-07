@@ -1,11 +1,12 @@
-🎨 Funzi
+
+## Funzi
 
 Funzi is a fun and educational app made with Flutter.
 It helps kids learn by playing simple and colorful games.
 Each game is designed to improve memory, focus, and creativity through sound, color, and shapes.
 
-🌟 Features
-🎵 Sound and Image Match
+## Features
+## Sound and Image Match
 
 Listen to a sound (like an animal or object).
 
@@ -13,7 +14,7 @@ Choose the correct picture that matches the sound.
 
 Learn to identify sounds in a fun way.
 
-🖌️ Coloring Game
+## Coloring Game
 
 Pick any sketch and color it freely.
 
@@ -25,19 +26,18 @@ Save your coloring to continue later.
 
 Zoom in with the magnifying glass for precise coloring.
 
-🧩 Picture and Shadow Match
+##  Picture and Shadow Match
 
 Match each object with its correct shadow.
 
 Helps kids recognize shapes and outlines.
-
-😀 Emotion Game
+## Emotion Game
 
 Learn about emotions using faces and expressions.
 
 Match the correct emotion with the right picture.
 
-🎉 Rewards and Sounds
+## Rewards and Sounds
 
 Fun sound effects when you complete levels.
 
@@ -45,7 +45,7 @@ Confetti animations for correct answers.
 
 A celebration screen when all levels are complete.
 
-🖼️ Highlights
+## Highlights
 
 Simple design, made for kids.
 
