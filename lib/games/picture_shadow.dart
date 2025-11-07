@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:playly/helpers/picture_shadow_levels.dart';
-import 'package:playly/helpers/sound_handles.dart';
-import 'package:playly/home.dart';
-import 'package:playly/helpers/confetti_effects.dart';
+import 'package:funzi/helpers/picture_shadow_levels.dart';
+import 'package:funzi/helpers/sound_handles.dart';
+import 'package:funzi/home.dart';
+import 'package:funzi/helpers/confetti_effects.dart';
 
 class PictureShadowGame extends StatefulWidget {
   const PictureShadowGame({super.key});
@@ -26,9 +25,6 @@ class _PictureShadowGameState extends State<PictureShadowGame> {
   @override
   void initState() {
     super.initState();
-    player.setVolume(1.0);
-    player.setSource(AssetSource('soundeffects/pluck.mp3'));
-    player.setSource(AssetSource('soundeffects/correct.mp3'));
     _confettiController = ConfettiController(
       duration: const Duration(seconds: 2),
     );
@@ -37,7 +33,6 @@ class _PictureShadowGameState extends State<PictureShadowGame> {
   @override
   void dispose() {
     _confettiController.dispose();
-    player.dispose();
     super.dispose();
   }
 
@@ -132,15 +127,13 @@ class _PictureShadowGameState extends State<PictureShadowGame> {
               Navigator.pop(context);
             },
           ),
-          title: Center(
-            child: Text(
-              isArabic ? 'مطابقة الصورة والظل' : 'Picture & Shadow Matching',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+          title: Text(
+            isArabic ? 'مطابقة الصورة والظل' : 'Picture & Shadow Matching',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
 
-                fontFamily: 'calibri',
-              ),
+              fontFamily: 'calibri',
             ),
           ),
           backgroundColor: const Color.fromARGB(255, 52, 52, 52),
@@ -188,8 +181,14 @@ class _PictureShadowGameState extends State<PictureShadowGame> {
 
                             _checkLevelComplete();
                           } else {
+                            await playCrossPlatformSound(
+                              'assets/soundeffects/wrong.mp3',
+                            );
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Try again!')),
+                              const SnackBar(
+                                content: Text('Try again!'),
+                                duration: Duration(seconds: 1),
+                              ),
                             );
                           }
                         },

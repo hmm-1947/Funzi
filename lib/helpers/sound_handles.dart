@@ -22,3 +22,25 @@ Future<void> playCrossPlatformSound(String assetPath) async {
   await tempFile.writeAsBytes(byteData.buffer.asUint8List());
   await player.play(DeviceFileSource(tempFile.path));
 }
+
+class AppAudio {
+  static final AudioPlayer _player = AudioPlayer();
+  static final List<String> _preloadSounds = [
+    'soundeffects/correct.mp3',
+    'soundeffects/pluck.mp3',
+    'soundeffects/won.mp3',
+    'soundeffects/wrong.mp3',
+  ];
+
+  static Future<void> preload() async {
+    // Load all 4 into memory
+    for (final path in _preloadSounds) {
+      await _player.setSource(AssetSource(path));
+    }
+  }
+
+  static Future<void> play(String assetPath) async {
+    await _player.stop();
+    await _player.play(AssetSource(assetPath));
+  }
+}

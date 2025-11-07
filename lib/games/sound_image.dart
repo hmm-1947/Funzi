@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'package:playly/helpers/confetti_effects.dart';
-import 'package:playly/helpers/sound_handles.dart';
-import 'package:playly/helpers/sound_image_levels.dart';
-import 'package:playly/home.dart';
+import 'package:funzi/helpers/confetti_effects.dart';
+import 'package:funzi/helpers/sound_handles.dart';
+import 'package:funzi/helpers/sound_image_levels.dart';
+import 'package:funzi/home.dart';
 
 final soundLevels = soundImageLevels;
 
@@ -31,7 +31,6 @@ class _SoundImageGameState extends State<SoundImageGame> {
 
   @override
   void dispose() {
-    player.dispose();
     _confettiController.dispose();
     super.dispose();
   }
@@ -43,8 +42,9 @@ class _SoundImageGameState extends State<SoundImageGame> {
   Future<void> checkAnswer(int index) async {
     if (answeredCorrectly) {
       return;
+    } else {
+      await playCrossPlatformSound('assets/soundeffects/wrong.mp3');
     }
-
     if (index == soundLevels[currentLevel].correctIndex) {
       setState(() {
         answeredCorrectly = true;
@@ -126,14 +126,12 @@ class _SoundImageGameState extends State<SoundImageGame> {
               Navigator.pop(context);
             },
           ),
-          title: Center(
-            child: Text(
-              isArabic ? 'مطابقة الصورة والصوت' : 'Picture & Sound Matching',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'calibri',
-              ),
+          title: Text(
+            isArabic ? 'مطابقة الصورة والصوت' : 'Picture & Sound Matching',
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'calibri',
             ),
           ),
           backgroundColor: const Color.fromARGB(255, 52, 52, 52),
@@ -190,7 +188,7 @@ class _SoundImageGameState extends State<SoundImageGame> {
                                     answeredCorrectly &&
                                         index == level.correctIndex
                                     ? Colors.green
-                                    : Colors.transparent,
+                                    : const Color.fromARGB(0, 203, 9, 9),
                                 width: 4,
                               ),
                               borderRadius: BorderRadius.circular(15),

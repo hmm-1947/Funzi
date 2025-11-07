@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:playly/helpers/sketches_game_levels.dart';
-import 'package:playly/home.dart';
+import 'package:funzi/helpers/sketches_game_levels.dart';
+import 'package:funzi/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ColoringPage extends StatefulWidget {
@@ -50,6 +50,7 @@ class _ColoringPageState extends State<ColoringPage>
         state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
       _saveAllDrawings();
+      _transformController.value = Matrix4.identity();
     }
   }
 
@@ -214,14 +215,12 @@ class _ColoringPageState extends State<ColoringPage>
               Navigator.pop(context);
             },
           ),
-          title: Center(
-            child: Text(
-              isArabic ? 'اختر رسمة' : 'Select a Sketch',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'calibri',
-              ),
+          title: Text(
+            isArabic ? 'اختر رسمة' : 'Select a Sketch',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'calibri',
             ),
           ),
           backgroundColor: const Color.fromARGB(255, 52, 52, 52),

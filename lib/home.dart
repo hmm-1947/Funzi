@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:playly/games/coloring_page.dart';
-import 'package:playly/games/emotion_game.dart';
-import 'package:playly/games/picture_shadow.dart';
-import 'package:playly/games/sound_image.dart';
+import 'package:funzi/games/coloring_page.dart';
+import 'package:funzi/games/emotion_game.dart';
+import 'package:funzi/games/picture_shadow.dart';
+import 'package:funzi/games/sound_image.dart';
 import 'dart:io' show Platform;
 
 class Home extends StatefulWidget {
@@ -62,14 +62,12 @@ class _HomeState extends State<Home> {
               ],
             ),
           ],
-          title: Center(
-            child: Text(
-              isArabic ? 'اختر لعبة' : 'Choose a Game',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'calibri',
-              ),
+          title: Text(
+            isArabic ? 'اختر لعبة' : 'Choose a Game',
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'calibri',
             ),
           ),
           backgroundColor: const Color.fromARGB(255, 52, 52, 52),

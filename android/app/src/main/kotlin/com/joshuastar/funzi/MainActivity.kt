@@ -1,4 +1,4 @@
-package com.example.playly
+package com.joshuastar.funzi
 
 import io.flutter.embedding.android.FlutterActivity
 
