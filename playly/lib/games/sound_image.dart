@@ -1,0 +1,270 @@
+import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:confetti/confetti.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:playly/helpers/sound_image_levels.dart';
+import 'package:playly/home.dart';
+
+final soundLevels = soundImageLevels;
+
+class SoundImageGame extends StatefulWidget {
+  const SoundImageGame({super.key});
+
+  @override
+  State<SoundImageGame> createState() => _SoundImageGameState();
+}
+
+final player = AudioPlayer();
+
+Future<void> playCrossPlatformSound(String assetPath) async {
+  await player.stop();
+
+  if (Platform.isAndroid) {
+    // Android handles AssetSource directly
+    await player.play(AssetSource(assetPath.replaceFirst('assets/', '')));
+    return;
+  }
+
+  // For Windows, Linux, macOS → copy to temp then play
+  final byteData = await rootBundle.load(assetPath);
+  final tempDir = await getTemporaryDirectory();
+  final tempFile = File('${tempDir.path}/${assetPath.split('/').last}');
+  await tempFile.writeAsBytes(byteData.buffer.asUint8List());
+  await player.play(DeviceFileSource(tempFile.path));
+}
+
+class _SoundImageGameState extends State<SoundImageGame> {
+  int currentLevel = 0;
+  bool answeredCorrectly = false;
+  bool allComplete = false;
+
+  late ConfettiController _confettiController;
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 2),
+    );
+  }
+
+  @override
+  void dispose() {
+    player.dispose();
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  void playSound() {
+    playCrossPlatformSound(soundLevels[currentLevel].soundPath);
+  }
+
+  Future<void> checkAnswer(int index) async {
+    if (answeredCorrectly) {
+      return;
+    }
+
+    if (index == soundLevels[currentLevel].correctIndex) {
+      setState(() {
+        answeredCorrectly = true;
+      });
+      _confettiController.play();
+      await playCrossPlatformSound('assets/soundeffects/correct.mp3');
+    }
+  }
+
+  void nextLevel() {
+    if (currentLevel < soundLevels.length - 1) {
+      setState(() {
+        currentLevel++;
+        answeredCorrectly = false;
+      });
+    } else {
+      setState(() {
+        allComplete = true;
+      });
+    }
+    if (allComplete) {
+      playCrossPlatformSound('assets/soundeffects/won.mp3');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (allComplete) {
+      return Scaffold(
+        backgroundColor: Colors.lightBlue.shade50,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                isArabic
+                    ? '🎉 جميع المستويات مكتملة! 🎉'
+                    : '🎉 All Levels Complete! 🎉',
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 15,
+                  ),
+                ),
+                child: Text(
+                  isArabic ? 'العودة إلى الصفحة الرئيسية' : 'Back to Home',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final level = soundLevels[currentLevel];
+
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/cover.jpg"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Center(
+            child: Text(
+              isArabic ? 'مطابقة الصورة والصوت' : 'Picture & Sound Matching',
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'calibri',
+              ),
+            ),
+          ),
+          backgroundColor: const Color.fromARGB(255, 52, 52, 52),
+        ),
+        body: Stack(
+          children: [
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ConfettiWidget(
+                confettiController: _confettiController,
+                blastDirection: -3.14 / 2,
+                emissionFrequency: 0.1,
+                numberOfParticles: 25,
+                gravity: 0.4,
+                blastDirectionality: BlastDirectionality.explosive,
+                maxBlastForce: 40,
+                minBlastForce: 20,
+                shouldLoop: false,
+              ),
+            ),
+            SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 40),
+                  SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: ElevatedButton(
+                      onPressed: playSound,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(
+                          255,
+                          115,
+                          255,
+                          103,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: EdgeInsets.zero,
+                      ),
+                      child: const Icon(
+                        Icons.volume_up,
+                        size: 80,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  Center(
+                    child: Wrap(
+                      spacing: 20,
+                      runSpacing: 20,
+                      alignment: WrapAlignment.center,
+                      children: List.generate(level.imagePaths.length, (index) {
+                        return GestureDetector(
+                          onTap: () => checkAnswer(index),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color:
+                                    answeredCorrectly &&
+                                        index == level.correctIndex
+                                    ? Colors.green
+                                    : Colors.transparent,
+                                width: 4,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 5,
+                                  offset: Offset(2, 2),
+                                ),
+                              ],
+                            ),
+                            child: Image.asset(
+                              level.imagePaths[index],
+                              width: 120,
+                              height: 120,
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  if (answeredCorrectly)
+                    ElevatedButton(
+                      onPressed: nextLevel,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 15,
+                        ),
+                      ),
+                      child: Text(
+                        isArabic ? 'استمر ➜' : 'Continue ➜',
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

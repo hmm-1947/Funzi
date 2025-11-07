@@ -1,0 +1,195 @@
+name: playly
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  audioplayers: ^6.5.1
+  confetti: ^0.8.0
+  cupertino_icons: ^1.0.8
+  flutter:
+    sdk: flutter
+  just_audio: ^0.10.5
+  shared_preferences: ^2.5.3
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  flutter_test:
+    sdk: flutter
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/picture_shadow/cat.png
+    - assets/picture_shadow/cat_shadow.png
+    - assets/picture_shadow/apple.png
+    - assets/picture_shadow/apple_shadow.png
+    - assets/picture_shadow/car.png
+    - assets/picture_shadow/car_shadow.png
+    - assets/picture_shadow/dog.png
+    - assets/picture_shadow/dog_shadow.png
+    - assets/picture_shadow/chair.png
+    - assets/picture_shadow/chair_shadow.png
+    - assets/picture_shadow/ball.png
+    - assets/picture_shadow/ball_shadow.png
+    - assets/picture_shadow/flower_shadow.png
+    - assets/picture_shadow/flower.png
+    - assets/picture_shadow/cloud.png
+    - assets/picture_shadow/cloud_shadow.png
+    - assets/picture_shadow/tree.png
+    - assets/picture_shadow/tree_shadow.png
+    - assets/picture_shadow/ship.png
+    - assets/picture_shadow/ship_shadow.png
+    - assets/picture_shadow/airplane.png
+    - assets/picture_shadow/airplane_shadow.png
+    - assets/picture_shadow/cycle.png
+    - assets/picture_shadow/cycle_shadow.png
+    - assets/picture_shadow/fish.png
+    - assets/picture_shadow/fish_shadow.png
+    - assets/picture_shadow/lamp.png
+    - assets/picture_shadow/lamp_shadow.png
+    - assets/picture_shadow/shoe.png
+    - assets/picture_shadow/shoe_shadow.png
+    - assets/picture_shadow/lamp.png
+    - assets/picture_shadow/lamp_shadow.png
+    - assets/picture_shadow/guitar.png
+    - assets/picture_shadow/guitar_shadow.png
+    - assets/picture_shadow/cup.png
+    - assets/picture_shadow/cup_shadow.png
+    - assets/picture_shadow/leaf.png
+    - assets/picture_shadow/leaf_shadow.png
+    - assets/picture_shadow/rocket.png
+    - assets/picture_shadow/rocket_shadow.png
+    - assets/picture_shadow/candle.png
+    - assets/picture_shadow/candle_shadow.png
+    - assets/picture_shadow/crocodile.png
+    - assets/picture_shadow/crocodile_shadow.png
+    - assets/picture_shadow/umberlla.png
+    - assets/picture_shadow/umberlla_shadow.png
+    - assets/picture_shadow/frog.png
+    - assets/picture_shadow/frog_shadow.png
+    - assets/picture_shadow/balloon.png
+    - assets/picture_shadow/balloon_shadow.png
+    - assets/picture_shadow/bird.png
+    - assets/picture_shadow/bird_shadow.png
+    - assets/picture_shadow/man.png
+    - assets/picture_shadow/man_shadow.png
+    - assets/picture_shadow/burger.png
+    - assets/picture_shadow/burger_shadow.png
+    - assets/picture_shadow/icecream.png
+    - assets/picture_shadow/icecream_shadow.png
+    - assets/picture_shadow/turtle.png
+    - assets/picture_shadow/turtle_shadow.png
+
+    - assets/sounds/train.png
+    - assets/sounds/cow.png
+    - assets/sounds/bird.png
+    - assets/sounds/duck.png
+    - assets/sounds/lion.png
+    - assets/sounds/elephant.png
+    - assets/sounds/cat.png
+    - assets/sounds/phone.png
+    - assets/sounds/rooster.png
+    - assets/sounds/bell.png
+
+    - assets/sketches/sketch_cat.png
+    - assets/sketches/sketch_car.png
+    - assets/sketches/sketch_flower.png
+    - assets/sketches/sketch_house.png
+    - assets/sketches/sketch_winnie.png
+    - assets/sketches/sketch_shoe.png
+    - assets/sketches/sketch_fish.png
+    - assets/sketches/sketch_hen.png
+    - assets/sketches/sketch_kettle.png
+    - assets/sketches/sketch_ship.png
+
+    - assets/logos/coloring_picture.png
+    - assets/logos/sound_matching.png
+    - assets/logos/picture_shadow.png
+    - assets/logos/emotion_faces.png
+
+    - assets/emotions/tired_face.png
+    - assets/emotions/disgusted_face.png
+    - assets/emotions/scared_face.png
+    - assets/emotions/happy_face.jpg
+    - assets/emotions/sad_face.jpg
+    - assets/emotions/angry_face.jpg
+    - assets/emotions/surprised_face.jpg
+    - assets/emotions/confused_face.png
+    - assets/emotions/shy_face.png
+    - assets/emotions/proud_face.png
+
+    - assets/sounds/dog_bark.mp3
+    - assets/sounds/car_horn.mp3
+    - assets/sounds/cow_moo.mp3
+    - assets/sounds/rooster.mp3
+    - assets/sounds/cat.mp3
+    - assets/sounds/lion.mp3
+    - assets/sounds/phone.mp3
+    - assets/sounds/train.mp3
+    - assets/sounds/bell.mp3
+    - assets/sounds/duck.mp3
+    - assets/sounds/elephant.mp3
+
+    - assets/soundeffects/pluck.mp3
+    - assets/soundeffects/correct.mp3
+    - assets/soundeffects/clock.mp3
+    - assets/soundeffects/won.mp3
+
+    - assets/cover.jpg
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/to/resolution-aware-images
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package
