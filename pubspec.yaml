@@ -152,10 +152,12 @@ flutter:
     - assets/logos/visual_cat.png
     - assets/logos/odd_one.png
     - assets/logos/puzzles.png
+    - assets/logos/soon.png
+
+    - assets/logos/soon_arabic.png
     - assets/logos/visual_cat_arabic.png
     - assets/logos/odd_one_arabic.png
     - assets/logos/puzzles_arabic.png
-
     - assets/logos/shadow_arabic.png
     - assets/logos/sound_arabic.png
     - assets/logos/emotion_arabic.png

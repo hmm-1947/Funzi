@@ -10,7 +10,7 @@ import 'package:naif/games/sound_image.dart';
 import 'package:naif/games/visual_cat.dart';
 
 // GLOBAL language state (replaces isArabic)
-ValueNotifier<bool> isArabic = ValueNotifier(false);
+ValueNotifier<bool> isArabicNotifier = ValueNotifier(false);
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -31,7 +31,7 @@ class Home extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 52, 52, 52),
           title: ValueListenableBuilder<bool>(
-            valueListenable: isArabic,
+            valueListenable: isArabicNotifier,
             builder: (context, isArabic, _) {
               return Text(
                 isArabic ? 'اختر لعبة' : 'Choose a Game',
@@ -55,12 +55,12 @@ class Home extends StatelessWidget {
                   ),
                 ),
                 ValueListenableBuilder<bool>(
-                  valueListenable: isArabic,
+                  valueListenable: isArabicNotifier,
                   builder: (context, isArabic, _) {
                     return Switch(
                       value: isArabic,
                       onChanged: (value) {
-                        isArabic.value = value;
+                        isArabicNotifier.value = value;
                       },
                     );
                   },
@@ -84,7 +84,7 @@ class Home extends StatelessWidget {
               int crossAxisCount = isDesktop ? 4 : 2;
 
               return ValueListenableBuilder<bool>(
-                valueListenable: isArabic,
+                valueListenable: isArabicNotifier,
                 builder: (context, isArabic, _) {
                   return GridView.count(
                     crossAxisCount: crossAxisCount,
@@ -165,6 +165,12 @@ class Home extends StatelessWidget {
                           context,
                           MaterialPageRoute(builder: (context) => PuzzleGame()),
                         ),
+                      ),
+                      GameCard(
+                        imagePath: isArabic
+                            ? 'assets/logos/soon_arabic.png'
+                            : 'assets/logos/soon.png',
+                        onTap: () => (),
                       ),
                     ],
                   );

@@ -6,9 +6,6 @@ import 'package:naif/helpers/sound_handles.dart';
 import 'package:naif/home.dart';
 import 'package:naif/helpers/confetti_effects.dart';
 
-// ===========================
-//   MAIN GAME (STATEFUL)
-// ===========================
 class PictureShadowGame extends StatefulWidget {
   const PictureShadowGame({super.key});
 
@@ -111,10 +108,7 @@ class _PictureShadowGameState extends State<PictureShadowGame> {
               },
             ),
 
-            // Confetti
             CommonConfetti(controller: _confettiController),
-
-            // Next level button
             if (levelCompleted) ContinueButton(onPressed: _nextLevel),
           ],
         ),
@@ -142,6 +136,8 @@ class BackgroundContainer extends StatelessWidget {
 }
 
 class GameAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const GameAppBar({super.key});
+
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
@@ -203,7 +199,6 @@ class GameBoard extends StatelessWidget {
             }).toList(),
           ),
 
-          // SHADOWS
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: shadows.map((item) {
@@ -301,7 +296,7 @@ class ShadowTarget extends StatelessWidget {
 
 class ContinueButton extends StatelessWidget {
   final VoidCallback onPressed;
-  const ContinueButton({required this.onPressed});
+  const ContinueButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
