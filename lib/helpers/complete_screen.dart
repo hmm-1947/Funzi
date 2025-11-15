@@ -12,7 +12,7 @@ class CompleteScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              isArabic
+              isArabicNotifier.value
                   ? "🎉 جميع المستويات مكتملة! 🎉"
                   : "🎉 All Levels Complete! 🎉",
               style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
@@ -21,7 +21,9 @@ class CompleteScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               child: Text(
-                isArabic ? "العودة إلى الصفحة الرئيسية" : "Back to Home",
+                isArabicNotifier.value
+                    ? "العودة إلى الصفحة الرئيسية"
+                    : "Back to Home",
               ),
             ),
           ],

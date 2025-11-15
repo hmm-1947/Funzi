@@ -68,7 +68,7 @@ class _OddOneState extends State<OddOne> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(isArabic ? "حاول مرة أخرى" : "Try Again"),
+          content: Text(isArabicNotifier.value ? "حاول مرة أخرى" : "Try Again"),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -112,7 +112,7 @@ class _OddOneState extends State<OddOne> {
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
-            isArabic ? "ابحث عن المختلف" : "Find the odd one out",
+            isArabicNotifier.value ? "ابحث عن المختلف" : "Find the odd one out",
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -203,7 +203,7 @@ class _OddOneState extends State<OddOne> {
                           ),
                         ),
                         child: Text(
-                          isArabic ? "استمر ➜" : "Continue ➜",
+                          isArabicNotifier.value ? "استمر ➜" : "Continue ➜",
                           style: const TextStyle(
                             fontSize: 20,
                             color: Colors.white,

@@ -92,7 +92,7 @@ class _PuzzleGameState extends State<PuzzleGame> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          isArabic ? "حل اللغز" : "Solve the Puzzle",
+          isArabicNotifier.value ? "حل اللغز" : "Solve the Puzzle",
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -255,7 +255,7 @@ class _PuzzleGameState extends State<PuzzleGame> {
                       ),
                     ),
                     child: Text(
-                      isArabic ? "استمر ➜" : "Continue ➜",
+                      isArabicNotifier.value ? "استمر ➜" : "Continue ➜",
                       style: const TextStyle(color: Colors.white, fontSize: 22),
                     ),
                   ),

@@ -6,6 +6,9 @@ import 'package:naif/helpers/sound_handles.dart';
 import 'package:naif/home.dart';
 import 'package:naif/helpers/confetti_effects.dart';
 
+// ===========================
+//   MAIN GAME (STATEFUL)
+// ===========================
 class PictureShadowGame extends StatefulWidget {
   const PictureShadowGame({super.key});
 
@@ -16,7 +19,6 @@ class PictureShadowGame extends StatefulWidget {
 class _PictureShadowGameState extends State<PictureShadowGame> {
   int currentLevel = 1;
   final Map<String, bool> _matched = {};
-
   final levels = pictureShadowLevels;
 
   bool levelCompleted = false;
@@ -48,13 +50,12 @@ class _PictureShadowGameState extends State<PictureShadowGame> {
   Future<void> _onLevelComplete() async {
     setState(() => levelCompleted = true);
     _confettiController.play();
-
     await playCrossPlatformSound('assets/soundeffects/correct.mp3');
   }
 
   void _nextLevel() async {
     setState(() {
-      if (currentLevel < 10) {
+      if (currentLevel < levels.length) {
         currentLevel++;
         _matched.clear();
         levelCompleted = false;
@@ -71,8 +72,9 @@ class _PictureShadowGameState extends State<PictureShadowGame> {
   @override
   Widget build(BuildContext context) {
     if (allcomplete) {
-      return CompleteScreen();
+      return const CompleteScreen();
     }
+
     final items = List<Map<String, String>>.from(
       levels[(currentLevel - 1) % levels.length],
     );
@@ -80,6 +82,53 @@ class _PictureShadowGameState extends State<PictureShadowGame> {
     final images = List<Map<String, String>>.from(items)..shuffle();
     final shadows = List<Map<String, String>>.from(items)..shuffle();
 
+    return BackgroundContainer(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: GameAppBar(),
+        body: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            GameBoard(
+              images: images,
+              shadows: shadows,
+              matched: _matched,
+              onCorrect: (imagePath) async {
+                setState(() => _matched[imagePath] = true);
+                await playCrossPlatformSound('assets/soundeffects/pluck.mp3');
+                _checkLevelComplete();
+              },
+              onWrong: () async {
+                await playCrossPlatformSound('assets/soundeffects/wrong.mp3');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      isArabicNotifier.value ? 'حاول مرة أخرى!' : 'Try again!',
+                    ),
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+              },
+            ),
+
+            // Confetti
+            CommonConfetti(controller: _confettiController),
+
+            // Next level button
+            if (levelCompleted) ContinueButton(onPressed: _nextLevel),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BackgroundContainer extends StatelessWidget {
+  final Widget child;
+  const BackgroundContainer({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -87,138 +136,186 @@ class _PictureShadowGameState extends State<PictureShadowGame> {
           fit: BoxFit.cover,
         ),
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: Text(
-            isArabic ? 'مطابقة الصورة والظل' : 'Picture & Shadow Matching',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+      child: child,
+    );
+  }
+}
 
-              fontFamily: 'calibri',
-            ),
-          ),
-          backgroundColor: const Color.fromARGB(255, 52, 52, 52),
+class GameAppBar extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: const Color.fromARGB(255, 52, 52, 52),
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.white),
+        onPressed: () => Navigator.pop(context),
+      ),
+      title: Text(
+        isArabicNotifier.value
+            ? 'مطابقة الصورة والظل'
+            : 'Picture & Shadow Matching',
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'calibri',
         ),
-        body: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: images.map((item) {
-                      final imagePath = item['image']!;
-                      return Draggable<String>(
-                        data: imagePath,
-                        feedback: Image.asset(imagePath, width: 100),
-                        childWhenDragging: Opacity(
-                          opacity: 0.3,
-                          child: Image.asset(imagePath, width: 100),
-                        ),
-                        child: _matched[imagePath] == true
-                            ? const SizedBox(width: 100, height: 100)
-                            : Image.asset(imagePath, width: 100),
-                      );
-                    }).toList(),
-                  ),
+      ),
+    );
+  }
+}
 
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: shadows.map((item) {
-                      final imagePath = item['image']!;
-                      final shadowPath = item['shadow']!;
-                      final matched = _matched[imagePath] == true;
+class GameBoard extends StatelessWidget {
+  final List<Map<String, String>> images;
+  final List<Map<String, String>> shadows;
 
-                      return DragTarget<String>(
-                        onAccept: (data) async {
-                          if (data == imagePath) {
-                            setState(() => _matched[imagePath] = true);
-                            await playCrossPlatformSound(
-                              'assets/soundeffects/pluck.mp3',
-                            );
+  final Map<String, bool> matched;
+  final Function(String imagePath) onCorrect;
+  final VoidCallback onWrong;
 
-                            _checkLevelComplete();
-                          } else {
-                            await playCrossPlatformSound(
-                              'assets/soundeffects/wrong.mp3',
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  isArabic ? 'حاول مرة أخرى!' : 'Try again!',
-                                ),
-                                duration: Duration(seconds: 1),
-                              ),
-                            );
-                          }
-                        },
-                        builder: (context, candidateData, rejectedData) {
-                          return Container(
-                            width: 100,
-                            height: 100,
-                            margin: const EdgeInsets.symmetric(vertical: 15),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: matched
-                                  ? Colors.green.shade100
-                                  : Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 5,
-                                  offset: const Offset(2, 3),
-                                ),
-                              ],
-                            ),
-                            child: matched
-                                ? const Icon(
-                                    Icons.check_circle,
-                                    color: Colors.green,
-                                    size: 40,
-                                  )
-                                : Image.asset(shadowPath, width: 100),
-                          );
-                        },
-                      );
-                    }).toList(),
-                  ),
-                ],
+  const GameBoard({
+    super.key,
+    required this.images,
+    required this.shadows,
+    required this.matched,
+    required this.onCorrect,
+    required this.onWrong,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          // IMAGES
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: images.map((item) {
+              final imagePath = item['image']!;
+              return DraggableImage(
+                imagePath: imagePath,
+                matched: matched[imagePath] == true,
+              );
+            }).toList(),
+          ),
+
+          // SHADOWS
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: shadows.map((item) {
+              final imagePath = item['image']!;
+              final shadowPath = item['shadow']!;
+              return ShadowTarget(
+                imagePath: imagePath,
+                shadowPath: shadowPath,
+                matched: matched[imagePath] == true,
+                onCorrect: onCorrect,
+                onWrong: onWrong,
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DraggableImage extends StatelessWidget {
+  final String imagePath;
+  final bool matched;
+
+  const DraggableImage({required this.imagePath, required this.matched});
+
+  @override
+  Widget build(BuildContext context) {
+    if (matched) {
+      return const SizedBox(width: 100, height: 100);
+    }
+
+    return Draggable<String>(
+      data: imagePath,
+      feedback: Image.asset(imagePath, width: 100),
+      childWhenDragging: Opacity(
+        opacity: 0.3,
+        child: Image.asset(imagePath, width: 100),
+      ),
+      child: Image.asset(imagePath, width: 100),
+    );
+  }
+}
+
+class ShadowTarget extends StatelessWidget {
+  final String imagePath;
+  final String shadowPath;
+  final bool matched;
+
+  final Function(String imagePath) onCorrect;
+  final VoidCallback onWrong;
+
+  const ShadowTarget({
+    required this.imagePath,
+    required this.shadowPath,
+    required this.matched,
+    required this.onCorrect,
+    required this.onWrong,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DragTarget<String>(
+      onAccept: (data) {
+        if (data == imagePath) {
+          onCorrect(imagePath);
+        } else {
+          onWrong();
+        }
+      },
+      builder: (context, candidate, rejected) {
+        return Container(
+          width: 100,
+          height: 100,
+          margin: const EdgeInsets.symmetric(vertical: 15),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: matched ? Colors.green.shade100 : Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 5,
+                offset: const Offset(2, 3),
               ),
-            ),
+            ],
+          ),
+          child: matched
+              ? const Icon(Icons.check_circle, color: Colors.green, size: 40)
+              : Image.asset(shadowPath, width: 100),
+        );
+      },
+    );
+  }
+}
 
-            CommonConfetti(controller: _confettiController),
+class ContinueButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  const ContinueButton({required this.onPressed});
 
-            const SizedBox(height: 40),
-            if (levelCompleted)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 60),
-                child: ElevatedButton(
-                  onPressed: _nextLevel,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 15,
-                    ),
-                  ),
-                  child: Text(
-                    isArabic ? 'استمر ➜' : 'Continue ➜',
-                    style: TextStyle(fontSize: 20, color: Colors.white),
-                  ),
-                ),
-              ),
-          ],
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 60),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.green,
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+        ),
+        child: Text(
+          isArabicNotifier.value ? 'استمر ➜' : 'Continue ➜',
+          style: const TextStyle(fontSize: 20, color: Colors.white),
         ),
       ),
     );

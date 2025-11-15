@@ -100,7 +100,9 @@ class _SoundImageGameState extends State<SoundImageGame> {
             },
           ),
           title: Text(
-            isArabic ? 'مطابقة الصورة والصوت' : 'Picture & Sound Matching',
+            isArabicNotifier.value
+                ? 'مطابقة الصورة والصوت'
+                : 'Picture & Sound Matching',
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -198,7 +200,7 @@ class _SoundImageGameState extends State<SoundImageGame> {
                         ),
                       ),
                       child: Text(
-                        isArabic ? 'استمر ➜' : 'Continue ➜',
+                        isArabicNotifier.value ? 'استمر ➜' : 'Continue ➜',
                         style: TextStyle(fontSize: 20, color: Colors.white),
                       ),
                     ),

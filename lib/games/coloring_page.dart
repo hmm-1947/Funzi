@@ -110,20 +110,20 @@ class _ColoringPageState extends State<ColoringPage>
     final result = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(isArabic ? "حفظ التلوين؟" : "Save Coloring?"),
+        title: Text(isArabicNotifier.value ? "حفظ التلوين؟" : "Save Coloring?"),
         content: Text(
-          isArabic
+          isArabicNotifier.value
               ? "هل تريد حفظ التلوين قبل الخروج؟"
               : "Do you want to save your coloring before exiting?",
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, 'cancel'),
-            child: Text(isArabic ? "إلغاء" : "Cancel"),
+            child: Text(isArabicNotifier.value ? "إلغاء" : "Cancel"),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, 'no'),
-            child: Text(isArabic ? "عدم الحفظ" : "Don't Save"),
+            child: Text(isArabicNotifier.value ? "عدم الحفظ" : "Don't Save"),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -131,7 +131,7 @@ class _ColoringPageState extends State<ColoringPage>
               Navigator.pop(context, 'yes');
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.lightBlue),
-            child: Text(isArabic ? "حفظ" : "Save"),
+            child: Text(isArabicNotifier.value ? "حفظ" : "Save"),
           ),
         ],
       ),
@@ -154,21 +154,21 @@ class _ColoringPageState extends State<ColoringPage>
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(isArabic ? 'مسح اللوحة؟' : 'Clear Canvas?'),
+        title: Text(isArabicNotifier.value ? 'مسح اللوحة؟' : 'Clear Canvas?'),
         content: Text(
-          isArabic
+          isArabicNotifier.value
               ? 'هل أنت متأكد من مسح رسوماتك؟'
               : 'Are you sure you want to clear your drawing?',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text(isArabic ? 'إلغاء' : 'Cancel'),
+            child: Text(isArabicNotifier.value ? 'إلغاء' : 'Cancel'),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-            child: Text(isArabic ? 'مسح' : 'Clear'),
+            child: Text(isArabicNotifier.value ? 'مسح' : 'Clear'),
           ),
         ],
       ),
@@ -216,7 +216,7 @@ class _ColoringPageState extends State<ColoringPage>
             },
           ),
           title: Text(
-            isArabic ? 'اختر رسمة' : 'Select a Sketch',
+            isArabicNotifier.value ? 'اختر رسمة' : 'Select a Sketch',
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -257,7 +257,9 @@ class _ColoringPageState extends State<ColoringPage>
   Widget _buildDrawingScreen() {
     return Scaffold(
       appBar: AppBar(
-        title: Text(isArabic ? 'تلوين الصورة' : 'Color the Picture'),
+        title: Text(
+          isArabicNotifier.value ? 'تلوين الصورة' : 'Color the Picture',
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () async {
@@ -455,7 +457,7 @@ class _ColoringPageState extends State<ColoringPage>
           if (!isErasing)
             Column(
               children: [
-                Text(isArabic ? "حجم الفرشاة" : "Brush Size"),
+                Text(isArabicNotifier.value ? "حجم الفرشاة" : "Brush Size"),
                 Slider(
                   value: brushSize,
                   min: 2,
@@ -469,7 +471,7 @@ class _ColoringPageState extends State<ColoringPage>
           if (isErasing)
             Column(
               children: [
-                Text(isArabic ? "حجم الممحاة" : "Eraser Size"),
+                Text(isArabicNotifier.value ? "حجم الممحاة" : "Eraser Size"),
                 Slider(
                   value: eraserSize,
                   min: 5,

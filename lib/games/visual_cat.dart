@@ -67,7 +67,7 @@ class _VisualCatState extends State<VisualCat> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(isArabic ? "حاول مرة أخرى" : "Try Again"),
+          content: Text(isArabicNotifier.value ? "حاول مرة أخرى" : "Try Again"),
           duration: Duration(seconds: 1),
         ),
       );
@@ -110,7 +110,9 @@ class _VisualCatState extends State<VisualCat> {
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
-            isArabic ? "اختر الصورة الصحيحة" : "Choose the Correct Image",
+            isArabicNotifier.value
+                ? "اختر الصورة الصحيحة"
+                : "Choose the Correct Image",
             style: const TextStyle(
               color: Colors.white,
               fontFamily: 'calibri',
@@ -136,7 +138,9 @@ class _VisualCatState extends State<VisualCat> {
 
                     // ⭐ QUESTION TEXT
                     Text(
-                      isArabic ? level.questionAr : level.questionEn,
+                      isArabicNotifier.value
+                          ? level.questionAr
+                          : level.questionEn,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 26,
@@ -252,7 +256,7 @@ class _VisualCatState extends State<VisualCat> {
                           ),
                         ),
                         child: Text(
-                          isArabic ? "استمر ➜" : "Continue ➜",
+                          isArabicNotifier.value ? "استمر ➜" : "Continue ➜",
                           style: const TextStyle(
                             fontSize: 20,
                             color: Colors.white,

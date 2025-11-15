@@ -143,7 +143,9 @@ class _EmotionGamePageState extends State<EmotionGamePage> {
                 onPressed: () => Navigator.pop(context),
               ),
               title: Text(
-                isArabic ? 'تحديد العاطفة' : 'Identify the Emotion',
+                isArabicNotifier.value
+                    ? 'تحديد العاطفة'
+                    : 'Identify the Emotion',
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -212,7 +214,7 @@ class _EmotionGamePageState extends State<EmotionGamePage> {
                               color = const Color.fromARGB(255, 85, 85, 85);
                             }
 
-                            final displayLabel = isArabic
+                            final displayLabel = isArabicNotifier.value
                                 ? arabicEmotions[emotionKey] ?? emotionKey
                                 : emotionKey;
 
@@ -270,7 +272,7 @@ class _EmotionGamePageState extends State<EmotionGamePage> {
                               ),
                             ),
                             child: Text(
-                              isArabic ? 'استمر ➜' : 'Continue ➜',
+                              isArabicNotifier.value ? 'استمر ➜' : 'Continue ➜',
                               style: const TextStyle(
                                 fontSize: 20,
                                 color: Colors.white,
